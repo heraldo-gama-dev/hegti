@@ -1,0 +1,25 @@
+name: Deploy Site Institucional hegTI
+on:
+  push:
+    branches:
+      - main
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Execute commands on Droplet to SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.DROPLET_IP}}
+          username: ${{ secrets.DROPLET_USER}}
+          key: ${{ secrets.DROPLET_SSH_KEY}}
+          port: 10091
+          script: |
+            echo "Conected on Droplet! Startind deploy process..."
+            cd ~/hegti-site/hegti
+            # Pull the latest changes from the main branch
+            git pull origin main
+            echo "Deploy process finished! "
